@@ -5,7 +5,7 @@ var path = require('path');
 module.exports = {
     entry: './src/app.js',
     output: {
-        path: __dirname + '/dist', //打包的文件放在什么地方
+        path: __dirname + '/dist', //打包的文件放在什么地方,：“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录
         filename: 'js/[name].bundle.js'
     },
     module: {
@@ -44,7 +44,7 @@ module.exports = {
             },
             {
                  test:/\.scss$/,
-                 loader:'style-loader!css-loader!postcss-loader!less-loader'
+                 loader:'style-loader!css-loader!postcss-loader!sass-loader'
             },
             {
                  test:/\.html$/,
