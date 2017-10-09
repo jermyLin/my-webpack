@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     entry: __dirname + "/app/main.js", //已多次提及的唯一入口文件
     output: {
@@ -33,22 +34,31 @@ module.exports = {
                 }, {
                     loader: "postcss-loader"
                 }]
-            },
-            {
-                test: /\.scss$/,
-                use: [{
-                        loader: "style-loader" // 将 JS 字符串生成为 style 节点
-                    }, {
-                        loader: "css-loader" // 将 CSS 转化成 CommonJS 模块
-                    },
-                    {
-                        loader: "postcss-loader"
-                    },
-                    {
-                        loader: "sass-loader" // 将 Sass 编译成 CSS
-                    }
-                ]
             }
+            , {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    //resolve-url-loader may be chained before sass-loader if necessary
+                    use: ['css-loader', 'sass-loader' , 'postcss-loader']
+                })
+            }
+            // ,
+            // {
+            //     test: /\.scss$/,
+            //     use: [{
+            //             loader: "style-loader" // 将 JS 字符串生成为 style 节点
+            //         }, {
+            //             loader: "css-loader" // 将 CSS 转化成 CommonJS 模块
+            //         },
+            //         {
+            //             loader: "postcss-loader"
+            //         },
+            //         {
+            //             loader: "sass-loader" // 将 Sass 编译成 CSS
+            //         }
+            //     ]
+            // }
         ]
     },
     plugins: [
@@ -56,6 +66,11 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: __dirname + "/app/index.tmpl.html" //new 一个这个插件的实例，并传入相关的参数
         }),
-        new webpack.HotModuleReplacementPlugin() //热加载插件
+        new webpack.HotModuleReplacementPlugin(), //热加载插件
+        // new ExtractTextPlugin("style.css")
+        new ExtractTextPlugin({
+            filename: "[name].[contenthash].css",
+            disable: process.env.NODE_ENV === "development"
+        })
     ],
 }
