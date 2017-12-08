@@ -11,8 +11,8 @@ module.exports = {
         contentBase: "./public", //本地服务器所加载的页面所在的目录
         historyApiFallback: true, //不跳转
         inline: true, //实时刷新
-        port: 8099,
         open: true,
+        hot: true
     },
     module: {
         rules: [{
@@ -43,22 +43,6 @@ module.exports = {
                     use: ['css-loader', 'sass-loader' , 'postcss-loader']
                 })
             }
-            // ,
-            // {
-            //     test: /\.scss$/,
-            //     use: [{
-            //             loader: "style-loader" // 将 JS 字符串生成为 style 节点
-            //         }, {
-            //             loader: "css-loader" // 将 CSS 转化成 CommonJS 模块
-            //         },
-            //         {
-            //             loader: "postcss-loader"
-            //         },
-            //         {
-            //             loader: "sass-loader" // 将 Sass 编译成 CSS
-            //         }
-            //     ]
-            // }
         ]
     },
     plugins: [
@@ -69,7 +53,7 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(), //热加载插件
         // new ExtractTextPlugin("style.css")
         new ExtractTextPlugin({
-            filename: "[name].[contenthash].css",
+            filename: "[name].[chunkhash:8].css",
             disable: process.env.NODE_ENV === "development"
         })
     ],
